@@ -1,7 +1,5 @@
 # Dygraphs in Elm
 
-> WARNING! Library is not completed (works partially on canvas refresh only).
-
 This package provides component to render [dygraphs] charts.
 
 [dygraphs]: https://github.com/danvk/dygraphs

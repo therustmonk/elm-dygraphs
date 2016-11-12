@@ -51,6 +51,7 @@ function render(model) {
 	var shared = {
 		// Shared reference to an instance
 		instance: null,
+		refresher: null,
 	}
 
 	var div = document.createElement('div');
@@ -64,6 +65,9 @@ function render(model) {
 	// It uses editor instance of prev and copy it to new
 	diff({ model: dummy }, { model: model })
 
+	// Resize till first real diff call, because virtual dom not renders it first time
+	shared.refresher = setInterval(function() { instance.resize(); }, 300);
+
 	return div;
 }
 
@@ -74,6 +78,11 @@ function diff(prev, next) {
 	var shared = pm.shared;
 	if (shared != null) {
 		shared.instance.updateOptions(nm.options, false);
+		// Reset refresher when diff called by reactor (not our `render`)
+		if (shared.refresher != null) {
+			clearInterval(shared.refresher);
+			shared.instance.resize();
+		}
 	}
 	nm.shared = shared;
     return null;
