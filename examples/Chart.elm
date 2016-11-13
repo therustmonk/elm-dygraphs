@@ -4,6 +4,7 @@
 import Html exposing (..)
 import Html.App as App
 import Html.Events exposing (..)
+import Random
 import Dygraphs
 
 main =
@@ -18,25 +19,57 @@ main =
 
 
 type alias Model =
-  { }
+    { data : List (List Int)
+    , labels : List String
+    , counter : Int
+    , seed : Random.Seed
+    }
 
 
 init : (Model, Cmd Msg)
 init =
-  ({ }, Cmd.none)
+    let
+        model =
+            { data = [ [ 1, 3, 6 ], [ 2, 16, -1 ] ]
+            , labels = [ "X", "A", "B" ]
+            , counter = 2
+            , seed = Random.initialSeed 1985
+            }
+    in
+        (model, Cmd.none)
 
+
+genInt = Random.int -20 20
+
+genList : List a -> Int -> Random.Generator a -> Random.Seed -> (List a, Random.Seed)
+genList data quantity gen seed =
+    if quantity > 0 then
+        let
+            (item, seed') = Random.step gen seed
+            quantity' = quantity - 1
+        in
+            genList (item :: data) quantity' gen seed'
+    else
+        (data, seed)
 
 
 -- UPDATE
 
 
 type Msg
-  = NoOp
+  = AddPoint
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
-    (model, Cmd.none)
+    case msg of
+        AddPoint ->
+            let
+                counter' = model.counter + 1
+                (item, seed') = genList [] 2 genInt model.seed
+                data' = List.append model.data [counter'::item]
+            in
+                ({ model | data = data', seed = seed', counter = counter' }, Cmd.none)
 
 
 -- SUBSCRIPTIONS
@@ -54,11 +87,8 @@ view : Model -> Html Msg
 view model =
   div []
     [ Dygraphs.toHtml
-        [ Dygraphs.labels
-            [ "XAxis"
-            , "Label A"
-            , "Label B"
-            ]
-        , Dygraphs.data <| Dygraphs.Rows [ [1, 3, 6], [2, 34, -1] ]
+        [ Dygraphs.labels model.labels
+        , Dygraphs.data <| Dygraphs.Rows model.data
         ] []
+    , Html.button [ onClick AddPoint ] [ text "Add point" ]
     ]

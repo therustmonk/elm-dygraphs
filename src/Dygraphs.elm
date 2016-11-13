@@ -1,4 +1,8 @@
-module Dygraphs exposing (..)
+module Dygraphs exposing (
+    toHtml,
+    Data(..),
+    data, labels
+    )
 
 {-| A library to use Dygraph as component.
 
@@ -42,14 +46,8 @@ data val =
             Attributes.property "file" (JE.string url)
         Rows rows ->
             let
-                conv row =
-                    List.map JE.int row
-                    |> Array.fromList
-                    |> JE.array
-                rows' =
-                    List.map conv rows
-                    |> Array.fromList
-                    |> JE.array
+                conv row = List.map JE.int row |> packArray
+                rows' = List.map conv rows |> packArray
             in
                 Attributes.property "file" rows'
 
@@ -58,10 +56,7 @@ data val =
 labels : List String -> Attribute msg
 labels vals =
     let
-        vals' =
-            List.map JE.string vals
-            |> Array.fromList
-            |> JE.array
+        vals' = List.map JE.string vals |> packArray
     in
         Attributes.property "labels" vals'
 
@@ -72,3 +67,7 @@ labels vals =
 toHtml : List (Attribute msg) -> List (Html msg) -> Html msg
 toHtml =
     Native.Dygraphs.toHtml
+
+-- Some internal stuffs
+
+packArray = Array.fromList >> JE.array
