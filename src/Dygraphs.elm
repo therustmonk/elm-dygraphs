@@ -1,7 +1,7 @@
 module Dygraphs exposing (
     toHtml,
     Data(..),
-    data, labels
+    data, labels, drawPoints
     )
 
 {-| A library to use Dygraph as component.
@@ -13,7 +13,7 @@ module Dygraphs exposing (
 @docs Data
 
 # Attributes
-@docs data, labels
+@docs data, labels, drawPoints
 
 -}
 
@@ -53,10 +53,15 @@ data val =
 -}
 labels : List String -> Attribute msg
 labels vals =
-    let
-        vals' = List.map JE.string vals |> packArray
-    in
-        Attributes.property "labels" vals'
+    let vals' = List.map JE.string vals |> packArray
+    in Attributes.property "labels" vals'
+
+{-| Set labels of plotted lines.
+-}
+drawPoints : Bool -> Attribute msg
+drawPoints flag =
+    let flag' = JE.bool flag
+    in Attributes.property "drawPoints" flag'
 
 {-| Creates `Html` instance with Dygraph attached to it.
 

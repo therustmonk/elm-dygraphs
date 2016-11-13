@@ -21,6 +21,7 @@ main =
 type alias Model =
     { data : List (List Int)
     , labels : List String
+    , drawPoints : Bool
     , counter : Int
     , seed : Random.Seed
     }
@@ -32,6 +33,7 @@ init =
         model =
             { data = [ [ 1, 3, 6 ], [ 2, 16, -1 ] ]
             , labels = [ "X", "A", "B" ]
+            , drawPoints = False
             , counter = 2
             , seed = Random.initialSeed 1985
             }
@@ -58,6 +60,7 @@ genList data quantity gen seed =
 
 type Msg
   = AddPoint
+  | TogglePoints
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -70,6 +73,8 @@ update msg model =
                 data' = List.append model.data [counter'::item]
             in
                 ({ model | data = data', seed = seed', counter = counter' }, Cmd.none)
+        TogglePoints ->
+            ({ model | drawPoints = not model.drawPoints }, Cmd.none)
 
 
 -- SUBSCRIPTIONS
@@ -88,7 +93,9 @@ view model =
   div []
     [ Dygraphs.toHtml
         [ Dygraphs.labels model.labels
+        , Dygraphs.drawPoints model.drawPoints
         , Dygraphs.data <| Dygraphs.Rows model.data
         ] []
     , Html.button [ onClick AddPoint ] [ text "Add point" ]
+    , Html.button [ onClick TogglePoints ] [ text "Toggle points" ]
     ]
