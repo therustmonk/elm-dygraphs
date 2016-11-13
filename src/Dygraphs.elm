@@ -33,9 +33,7 @@ type Data
     | Rows (List (List Int))
 
 
-{-| Attribute to set the theme to Ace.
-
-    Ace.toHtml [ Ace.theme "monokai" ] []
+{-| Data which will be attached to Dygraph.
 -}
 data : Data -> Attribute msg
 data val =
@@ -62,7 +60,7 @@ labels vals =
 
 {-| Creates `Html` instance with Dygraph attached to it.
 
-    Ace.toHtml [] []
+    Dygraph.toHtml [] []
 -}
 toHtml : List (Attribute msg) -> List (Html msg) -> Html msg
 toHtml =
