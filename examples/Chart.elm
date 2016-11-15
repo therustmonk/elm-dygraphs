@@ -20,7 +20,7 @@ main =
 
 
 type alias Model =
-    { data : List (List Int)
+    { data : List (List Float)
     , labels : List String
     , drawPoints : Bool
     , counter : Int
@@ -32,7 +32,7 @@ init : (Model, Cmd Msg)
 init =
     let
         model =
-            { data = [ [ 1, 3, 6 ], [ 2, 16, -1 ] ]
+            { data = [ [ 1.0, 3.0, 6.0 ], [ 2.0, 16.0, -1.0 ] ]
             , labels = [ "X", "A", "B" ]
             , drawPoints = False
             , counter = 2
@@ -42,7 +42,7 @@ init =
         (model, Cmd.none)
 
 
-genInt = Random.int -20 20
+genItem = Random.float -20 20
 
 genList : List a -> Int -> Random.Generator a -> Random.Seed -> (List a, Random.Seed)
 genList data quantity gen seed =
@@ -70,7 +70,7 @@ update msg model =
         AddPoint ->
             let
                 counter' = model.counter + 1
-                (item, seed') = genList [] 2 genInt model.seed
+                (item, seed') = genList [] 2 genItem model.seed
                 data' = List.append model.data [counter'::item]
             in
                 ({ model | data = data', seed = seed', counter = counter' }, Cmd.none)

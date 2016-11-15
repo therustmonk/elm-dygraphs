@@ -30,7 +30,7 @@ import Native.Dygraphs
 type Data
     = Csv String
     | Url String
-    | Rows (List (List Int))
+    | Rows (List (List Float))
 
 
 {-| Data which will be attached to Dygraph.
@@ -44,7 +44,7 @@ data val =
             Attributes.property "file" (JE.string url)
         Rows rows ->
             let
-                conv row = List.map JE.int row |> packArray
+                conv row = List.map JE.float row |> packArray
                 rows' = List.map conv rows |> packArray
             in
                 Attributes.property "file" rows'
