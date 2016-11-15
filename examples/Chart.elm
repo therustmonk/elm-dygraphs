@@ -4,6 +4,7 @@
 import Html exposing (..)
 import Html.App as App
 import Html.Events exposing (..)
+import Html.Attributes exposing (..)
 import Random
 import Dygraphs
 
@@ -90,12 +91,12 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  div []
+  div [ class "chart" ]
     [ Dygraphs.toHtml
         [ Dygraphs.labels model.labels
         , Dygraphs.drawPoints model.drawPoints
         , Dygraphs.data <| Dygraphs.Rows model.data
         ] []
-    , Html.button [ onClick AddPoint ] [ text "Add point" ]
-    , Html.button [ onClick TogglePoints ] [ text "Toggle points" ]
+    , button [ onClick AddPoint ] [ text "Add point" ]
+    , button [ onClick TogglePoints ] [ text "Toggle points" ]
     ]

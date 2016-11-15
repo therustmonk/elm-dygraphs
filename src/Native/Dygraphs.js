@@ -12,7 +12,7 @@ function toHtml(factList, skipChildren) {
 function emptyModel() {
 	return {
 		shared: null,
-		options: { },
+		options: { width: 100, height: 100 },
 	};
 }
 
@@ -56,6 +56,8 @@ function render(model) {
 
 	var div = document.createElement('div');
 	div.setAttribute("class", "elm-dygraphs");
+	// Fill the parent strictly to prevent size crusty behavior
+	div.setAttribute("style", "width: 100%; height: 100%;");
 
 	var instance = new Dygraph(div);
 	shared.instance = instance;
