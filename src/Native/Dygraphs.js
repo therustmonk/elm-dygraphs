@@ -12,7 +12,7 @@ function toHtml(factList, skipChildren) {
 function emptyModel() {
 	return {
 		shared: null,
-		options: { width: 100, height: 100 },
+		options: { },
 	};
 }
 
