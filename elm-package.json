@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "summary": "Dygraphs chart component",
     "repository": "https://github.com/DenisKolodin/elm-dygraphs.git",
     "license": "BSD3",
