@@ -18,6 +18,7 @@ module Dygraphs exposing (
 -}
 
 import Array exposing (Array)
+import Date exposing (Date)
 import Html exposing (Html, Attribute)
 import Html.Attributes as Attributes
 import Html.Events as Events
@@ -31,6 +32,7 @@ type Data
     = Csv String
     | Url String
     | Rows (List (List Float))
+    | Slices (List (Date, List Float))
 
 
 {-| Data which will be attached to Dygraph.
@@ -44,8 +46,22 @@ data val =
             Attributes.property "file" (JE.string url)
         Rows rows ->
             let
-                conv row = List.map JE.float row |> JE.list
-                rows' = List.map conv rows |> JE.list
+                conv row =
+                    List.map JE.float row
+                    |> JE.list
+                rows' =
+                    List.map conv rows
+                    |> JE.list
+            in
+                Attributes.property "file" rows'
+        Slices rows ->
+            let
+                conv (date, row) =
+                    (Native.Dygraphs.packDate date) :: List.map JE.float row
+                    |> JE.list
+                rows' =
+                    List.map conv rows
+                    |> JE.list
             in
                 Attributes.property "file" rows'
 

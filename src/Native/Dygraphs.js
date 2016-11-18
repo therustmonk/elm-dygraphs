@@ -87,11 +87,16 @@ function diff(prev, next) {
 		}
 	}
 	nm.shared = shared;
-    return null;
+	return null;
+}
+
+function packDate(date) {
+	return date;
 }
 
 return {
 	toHtml: F2(toHtml),
+	packDate: packDate,
 };
 
 }();
