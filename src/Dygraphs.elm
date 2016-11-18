@@ -44,8 +44,8 @@ data val =
             Attributes.property "file" (JE.string url)
         Rows rows ->
             let
-                conv row = List.map JE.float row |> packArray
-                rows' = List.map conv rows |> packArray
+                conv row = List.map JE.float row |> JE.list
+                rows' = List.map conv rows |> JE.list
             in
                 Attributes.property "file" rows'
 
@@ -53,7 +53,7 @@ data val =
 -}
 labels : List String -> Attribute msg
 labels vals =
-    let vals' = List.map JE.string vals |> packArray
+    let vals' = List.map JE.string vals |> JE.list
     in Attributes.property "labels" vals'
 
 {-| Set labels of plotted lines.
@@ -71,6 +71,3 @@ toHtml : List (Attribute msg) -> List (Html msg) -> Html msg
 toHtml =
     Native.Dygraphs.toHtml
 
--- Some internal stuffs
-
-packArray = Array.fromList >> JE.array
